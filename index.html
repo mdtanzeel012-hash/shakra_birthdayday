@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Shakra Shams!</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at center, #FFF5F7 0%, #FCE7F0 50%, #F4D3E1 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .font-serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .font-cursive {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        /* Gold Gradient Text */
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Gold Foil Border */
+        .gold-border {
+            border: 2px solid transparent;
+            border-image: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C) 1;
+        }
+
+        /* Subtle Shimmer Effect */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .shimmer-bg {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 4s infinite linear;
+        }
+
+        /* 3D Flip Card Styles */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .transform-style-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* Floating Hearts Animation */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.8) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -50px;
+            pointer-events: none;
+            animation: floatUp 8s infinite linear;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FCE7F0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-between p-4 md:p-8 min-h-screen relative text-gray-800">
+
+    <div id="hearts-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+    <!-- MAIN CONTAINER -->
+    <main class="w-full max-w-4xl mx-auto z-10 my-auto flex flex-col items-center">
+        
+        <!-- Header Sparkle Title -->
+        <header class="text-center mb-6 md:mb-8 animate-fade-in">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/60 backdrop-blur-md border border-pink-200 shadow-sm mb-3">
+                <span class="text-xs md:text-sm font-medium tracking-widest uppercase text-pink-700">A Special Celebration</span>
+                <span class="text-amber-500">✨</span>
+            </div>
+            <h1 class="font-serif-title text-3xl md:text-5xl font-bold gold-gradient-text tracking-tight">
+                17th February
+            </h1>
+        </header>
+
+        <section class="w-full max-w-md md:max-w-xl mb-6 bg-white/70 backdrop-blur-md border border-pink-200/80 rounded-2xl p-4 shadow-md text-center">
+            <div class="flex items-center justify-center gap-2 mb-2">
+                <span class="text-amber-500 text-sm">⏳</span>
+                <h3 class="text-xs md:text-sm uppercase tracking-wider font-semibold text-pink-800">Countdown to Next February 17th</h3>
+                <span class="text-amber-500 text-sm">✨</span>
+            </div>
+            <div id="countdown-timer" class="grid grid-cols-4 gap-2 text-center">
+                <div class="bg-pink-50/80 rounded-xl p-2 border border-pink-100 shadow-inner">
+                    <span id="days" class="block font-serif-title text-xl md:text-2xl font-bold gold-gradient-text">00</span>
+                    <span class="text-[10px] md:text-xs uppercase tracking-wider text-pink-600 font-medium">Days</span>
+                </div>
+                <div class="bg-pink-50/80 rounded-xl p-2 border border-pink-100 shadow-inner">
+                    <span id="hours" class="block font-serif-title text-xl md:text-2xl font-bold gold-gradient-text">00</span>
+                    <span class="text-[10px] md:text-xs uppercase tracking-wider text-pink-600 font-medium">Hours</span>
+                </div>
+                <div class="bg-pink-50/80 rounded-xl p-2 border border-pink-100 shadow-inner">
+                    <span id="minutes" class="block font-serif-title text-xl md:text-2xl font-bold gold-gradient-text">00</span>
+                    <span class="text-[10px] md:text-xs uppercase tracking-wider text-pink-600 font-medium">Mins</span>
+                </div>
+                <div class="bg-pink-50/80 rounded-xl p-2 border border-pink-100 shadow-inner">
+                    <span id="seconds" class="block font-serif-title text-xl md:text-2xl font-bold gold-gradient-text">00</span>
+                    <span class="text-[10px] md:text-xs uppercase tracking-wider text-pink-600 font-medium">Secs</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="perspective-1000 w-full max-w-md md:max-w-xl h-[520px] md:h-[580px] cursor-pointer group" onclick="flipCard()">
+            <div id="card-inner" class="transform-style-3d relative w-full h-full duration-700 shadow-2xl rounded-2xl">
+                
+                <!-- CARD FRONT -->
+                <div class="backface-hidden absolute inset-0 w-full h-full bg-gradient-to-br from-white via-pink-50 to-pink-100 rounded-2xl p-6 md:p-8 flex flex-col justify-between items-center text-center border-4 border-amber-200/60 shadow-inner overflow-hidden">
+                    
+                    <!-- Decorative Corner Filigrees -->
+                    <div class="absolute top-3 left-3 text-amber-400 text-xl md:text-2xl opacity-70">✦</div>
+                    <div class="absolute top-3 right-3 text-amber-400 text-xl md:text-2xl opacity-70">✦</div>
+                    <div class="absolute bottom-3 left-3 text-amber-400 text-xl md:text-2xl opacity-70">✦</div>
+                    <div class="absolute bottom-3 right-3 text-amber-400 text-xl md:text-2xl opacity-70">✦</div>
+
+                    <!-- Top Banner -->
+                    <div class="mt-4">
+                        <span class="font-cursive text-2xl md:text-3xl text-pink-500 block mb-1">To My Dearest Wife</span>
+                        <div class="h-0.5 w-24 mx-auto bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
+                    </div>
+
+                    <!-- Main Name Banner -->
+                    <div class="my-auto py-6 px-4 relative w-full">
+                        <div class="absolute inset-0 bg-white/40 backdrop-blur-sm rounded-xl border border-pink-200/50 shadow-sm"></div>
+                        <div class="relative z-10">
+                            <p class="text-xs uppercase tracking-widest text-pink-600 font-semibold mb-2">Happy Birthday</p>
+                            <h2 class="font-serif-title text-4xl md:text-5xl font-bold gold-gradient-text leading-tight drop-shadow-sm">
+                                SHAKRA SHAMS
+                            </h2>
+                            <p class="font-cursive text-2xl md:text-3xl text-pink-700 mt-2">My Heart & Soul</p>
+                        </div>
+                    </div>
+
+                    <!-- Front Bottom Interactive Prompt -->
+                    <div class="mb-4 flex flex-col items-center">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-r from-amber-300 to-amber-500 text-white flex items-center justify-center shadow-md animate-bounce mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 2-2-2m2-5pt0 6m-7 4h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <p class="text-xs text-pink-700 font-medium tracking-wide">Tap anywhere to open your card ✨</p>
+                    </div>
+                </div>
+
+                <!-- CARD INSIDE (BACK) -->
+                <div class="backface-hidden rotate-y-180 absolute inset-0 w-full h-full bg-gradient-to-br from-white via-pink-50/80 to-white rounded-2xl p-6 md:p-8 flex flex-col justify-between border-4 border-amber-300/80 shadow-2xl overflow-y-auto">
+                    
+                    <!-- Inner Gold Border Detail -->
+                    <div class="absolute inset-3 border border-amber-200/50 rounded-xl pointer-events-none"></div>
+
+                    <!-- Card Header -->
+                    <div class="text-center pt-2">
+                        <h3 class="font-serif-title text-2xl md:text-3xl font-bold gold-gradient-text">Happy Birthday, My Queen</h3>
+                        <p class="text-xs text-pink-500 font-medium tracking-wider uppercase mt-1">17th February • Forever & Always</p>
+                        <div class="h-0.5 w-16 mx-auto bg-amber-300 mt-2"></div>
+                    </div>
+
+                    <!-- Custom Message -->
+                    <div class="my-4 text-gray-700 text-sm md:text-base leading-relaxed space-y-3 font-light px-2">
+                        <p>
+                            To my beautiful wife, <strong class="font-semibold text-pink-800">Shakra</strong>,
+                        </p>
+                        <p>
+                            On this beautiful day of February 17th, I want to remind you how deeply blessed I am to share my life with you. You bring warmth, elegance, light, and endless joy into my world every single day.
+                        </p>
+                        <p>
+                            May your birthday be as luminous, sweet, and extraordinary as your heart is. May this year bring you all the love, peace, and happiness you so truly deserve.
+                        </p>
+                    </div>
+
+                    <!-- Card Signature -->
+                    <div class="text-right pb-2 pr-2">
+                        <p class="text-xs text-gray-500 uppercase tracking-widest">With all my love,</p>
+                        <p class="font-cursive text-3xl md:text-4xl text-amber-600 font-bold mt-1">Aadam Hussain</p>
+                    </div>
+
+                    <!-- Flip Back Hint -->
+                    <div class="text-center pt-2">
+                        <span class="text-[10px] text-pink-400 font-medium">Tap to turn card over</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 flex flex-wrap justify-center items-center gap-3 md:gap-4 w-full">
+            <!-- Confetti Button -->
+            <button onclick="triggerConfetti(event)" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-white font-medium text-sm shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition duration-200 flex items-center gap-2">
+                <span>🎉 Celebration Sparkles</span>
+            </button>
+
+            <!-- Music Toggle Button -->
+            <button id="music-btn" onclick="toggleMusic()" class="px-5 py-2.5 rounded-full bg-white text-pink-700 border border-pink-200 font-medium text-sm shadow-md hover:bg-pink-50 hover:scale-105 active:scale-95 transition duration-200 flex items-center gap-2">
+                <span id="music-icon">🎵</span>
+                <span id="music-text">Play Gentle Music</span>
+            </button>
+
+            <!-- Show Wish Modal Button -->
+            <button onclick="openModal()" class="px-5 py-2.5 rounded-full bg-pink-500 hover:bg-pink-600 text-white font-medium text-sm shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition duration-200 flex items-center gap-2">
+                <span>💌 Special Love Note</span>
+            </button>
+        </div>
+
+    </main>
+
+    <div id="love-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 md:p-8 border-2 border-amber-300 shadow-2xl relative transform scale-95 transition-transform duration-300" id="modal-content">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold p-1">✕</button>
+            
+            <div class="text-center mb-4">
+                <span class="text-3xl">💖</span>
+                <h3 class="font-serif-title text-2xl font-bold gold-gradient-text mt-2">A Note for Shakra</h3>
+                <div class="h-0.5 w-12 bg-pink-300 mx-auto mt-2"></div>
+            </div>
+
+            <div class="text-gray-600 text-sm md:text-base leading-relaxed space-y-3 my-4">
+                <p>
+                    "In you, I found my soulmate, my best friend, and my greatest treasure. Every 17th of February is a celebration not just of the day you were born, but of the day the world became a brighter place."
+                </p>
+                <p class="font-semibold text-pink-700 text-center italic">
+                    — Forever Yours, Aadam
+                </p>
+            </div>
+
+            <div class="mt-6 text-center">
+                <button onclick="closeModal()" class="px-6 py-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-white font-medium text-sm shadow-md hover:opacity-90">
+                    Close Note
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-8 text-center text-xs text-pink-800/60 font-medium z-10 pb-2">
+        Crafted with endless love by Aadam Hussain for Shakra Shams • Feb 17
+    </footer>
+
+    <script>
+        // Audio Synthesizer (Tone player using Web Audio API for background music without external assets)
+        let audioContext = null;
+        let isPlaying = false;
+        let melodyInterval = null;
+
+        function playRomanticMelody() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+
+            // Simple warm chime notes sequence
+            const notes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23, 329.63, 392.00]; // C E G C A F E G
+            let noteIndex = 0;
+
+            melodyInterval = setInterval(() => {
+                if (!isPlaying) return;
+
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(notes[noteIndex], audioContext.currentTime);
+
+                // Soft envelope for gentle sound
+                gain.gain.setValueAtTime(0, audioContext.currentTime);
+                gain.gain.linearRampToValueAtTime(0.08, audioContext.currentTime + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1.2);
+
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                osc.start();
+                osc.stop(audioContext.currentTime + 1.3);
+
+                noteIndex = (noteIndex + 1) % notes.length;
+            }, 800);
+        }
+
+        function toggleMusic() {
+            const btnText = document.getElementById('music-text');
+            const btnIcon = document.getElementById('music-icon');
+
+            if (!isPlaying) {
+                isPlaying = true;
+                playRomanticMelody();
+                btnText.textContent = "Pause Music";
+                btnIcon.textContent = "🎶";
+            } else {
+                isPlaying = false;
+                if (melodyInterval) clearInterval(melodyInterval);
+                btnText.textContent = "Play Gentle Music";
+                btnIcon.textContent = "🎵";
+            }
+        }
+
+        // 3D Card Flip Logic
+        let isFlipped = false;
+        function flipCard() {
+            const cardInner = document.getElementById('card-inner');
+            isFlipped = !isFlipped;
+
+            if (isFlipped) {
+                cardInner.style.transform = 'rotateY(180deg)';
+                triggerSmallConfetti();
+            } else {
+                cardInner.style.transform = 'rotateY(0deg)';
+            }
+        }
+
+        // Floating Background Hearts Generator
+        function createFloatingHearts() {
+            const container = document.getElementById('hearts-container');
+            const heartIcons = ['💖', '✨', '🌸', '💕', '👑', '💛'];
+
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart text-lg md:text-2xl';
+                heart.innerHTML = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.animationDuration = `${6 + Math.random() * 6}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                heart.style.opacity = Math.random() * 0.7 + 0.3;
+                container.appendChild(heart);
+            }
+        }
+
+        // Countdown Timer Logic (Next February 17th)
+        function updateCountdown() {
+            const now = new Date();
+            let year = now.getFullYear();
+            let targetDate = new Date(year, 1, 17); // Month 1 is February (0-indexed)
+
+            // If Feb 17 has already passed this year, target next year's Feb 17
+            if (now.getTime() > targetDate.getTime()) {
+                targetDate = new Date(year + 1, 1, 17);
+            }
+
+            const diff = targetDate.getTime() - now.getTime();
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        // Confetti Effects (Gold & Pink Theme)
+        function triggerConfetti(event) {
+            if (event) event.stopPropagation();
+            
+            confetti({
+                particleCount: 80,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#D4AF37', '#FFD700', '#FFB6C1', '#FF69B4', '#FFF5F7']
+            });
+        }
+
+        function triggerSmallConfetti() {
+            confetti({
+                particleCount: 35,
+                spread: 50,
+                origin: { y: 0.5 },
+                colors: ['#BF953F', '#FCF6BA', '#F4D3E1']
+            });
+        }
+
+        // Modal Functions
+        function openModal() {
+            const modal = document.getElementById('love-modal');
+            const content = document.getElementById('modal-content');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+            triggerSmallConfetti();
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('love-modal');
+            const content = document.getElementById('modal-content');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+        }
+
+        // Initialize background animation and countdown on page load
+        window.onload = function() {
+            createFloatingHearts();
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+
+            // Initial welcoming confetti burst
+            setTimeout(() => {
+                triggerSmallConfetti();
+            }, 600);
+        };
+    </script>
+</body>
+</html>
